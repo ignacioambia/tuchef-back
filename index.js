@@ -1,11 +1,7 @@
 const express = require('express');
 const app = express();
 
-require('./startup/prod')(app)
-
-
-const meals = require('./routes/meals');
-app.use('/meals', meals );
+require("./startup/prod")(app);
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -17,6 +13,9 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+const meals = require("./routes/meals");
+app.use("/meals", meals);
 
 
 
