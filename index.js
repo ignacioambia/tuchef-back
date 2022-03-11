@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require("mongoose");
 const app = express();
 
 require("./startup/prod")(app);
@@ -13,9 +14,17 @@ app.use(function (req, res, next) {
   );
   next();
 });
+app.use(express.json());
 
-const meals = require("./routes/meals");
-app.use("/meals", meals);
+mongoose
+  .connect("mongodb://localhost/tuchef-dev")
+  .then(() => {
+    console.log("Connection to DB was successfully done");
+  })
+  .catch((e) => console.error("Could not connect to db", e));
+
+const dishes = require("./routes/dishes");
+app.use("/dishes", dishes);
 
 
 
