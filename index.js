@@ -1,5 +1,7 @@
-const express = require('express');
+const express = require("express");
 const mongoose = require("mongoose");
+const config = require("config");
+
 const app = express();
 
 require("./startup/prod")(app);
@@ -17,7 +19,7 @@ app.use(function (req, res, next) {
 app.use(express.json());
 
 mongoose
-  .connect("mongodb://localhost/tuchef-dev")
+  .connect(config.get("tuchef-db"))
   .then(() => {
     console.log("Connection to DB was successfully done");
   })
@@ -26,14 +28,17 @@ mongoose
 const dishes = require("./routes/dishes");
 app.use("/dishes", dishes);
 
-
-
-app.get('/', (req, res)=>{
- res.send('Hello world');
+app.get("/", (req, res) => {
+  res.send("Hello world");
 });
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, ()=>{
- console.log('Everything working now');
+app.listen(port, () => {
+  console.log(
+    "Listening on port",
+    port,
+    process.env.NODE_ENV,
+    config.get("tuchef-db")
+  );
 });
